@@ -1,0 +1,111 @@
+# Dependabot configuration for automated dependency updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+
+# registries:
+  # Azure Container Registry - uncomment and configure if using private base images
+  # azure-acr:
+  #   type: docker-registry
+  #   url: https://your-registry.azurecr.io
+  #   username: ${{ secrets.ACR_USERNAME }}
+  #   password: ${{ secrets.ACR_PASSWORD }}
+
+updates:
+  # -----------------------------------------------------------------------------
+  # .NET Dependencies (NuGet)
+  # -----------------------------------------------------------------------------
+  - package-ecosystem: "nuget"
+    directory: "/src/SafeShip"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps(nuget)"
+    labels:
+      - "dependencies"
+      - "nuget"
+    groups:
+      # Group minor and patch updates for Microsoft packages
+      microsoft-packages:
+        patterns:
+          - "Microsoft.*"
+          - "Azure.*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group Entity Framework updates
+      ef-core:
+        patterns:
+          - "Microsoft.EntityFrameworkCore*"
+
+  # -----------------------------------------------------------------------------
+  # GitHub Actions
+  # -----------------------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(actions)"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      # Group all GitHub Actions updates together
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # -----------------------------------------------------------------------------
+  # Terraform Providers
+  # -----------------------------------------------------------------------------
+  - package-ecosystem: "terraform"
+    directory: "/infra"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(terraform)"
+    labels:
+      - "dependencies"
+      - "terraform"
+    groups:
+      # Group Azure provider updates
+      azure-providers:
+        patterns:
+          - "hashicorp/azurerm"
+          - "azure/azapi"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # -----------------------------------------------------------------------------
+  # Docker Base Images
+  # -----------------------------------------------------------------------------
+  - package-ecosystem: "docker"
+    directory: "/src/SafeShip"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "deps(docker)"
+    labels:
+      - "dependencies"
+      - "docker"
