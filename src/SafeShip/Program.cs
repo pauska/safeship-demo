@@ -4,8 +4,14 @@ using SafeShip.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Support SQL_CONNECTION_STRING environment variable for Kubernetes/container deployments
+// Falls back to appsettings.json ConnectionStrings:DefaultConnection for local development
+var connectionString = Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("SQL connection string not configured. Set SQL_CONNECTION_STRING environment variable or configure ConnectionStrings:DefaultConnection.");
+
 builder.Services.AddDbContext<SafeShipDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
 
