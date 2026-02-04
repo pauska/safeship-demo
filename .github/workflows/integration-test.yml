@@ -10,7 +10,7 @@ on:
       - 'src/**'
       - 'docker-compose.yml'
       - 'scripts/**'
-      - '.github/workflows/integration-test.yml'
+      - '.github/workflows/*.yml'
   workflow_dispatch:
 
 env:
