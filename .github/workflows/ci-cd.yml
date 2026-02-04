@@ -136,7 +136,7 @@ jobs:
           sleep 30
           FQDN=$(az containerapp show --name ${{ vars.CONTAINER_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query "properties.configuration.ingress.fqdn" -o tsv)
           echo "Application URL: https://${FQDN}"
-          curl -f "https://${FQDN}/health" || exit 1
+          curl -f --max-time 30 "https://${FQDN}/health" || exit 1
           echo "✅ Health check passed!"
 
   # ---------------------------------------------------------------------------
@@ -169,5 +169,5 @@ jobs:
           sleep 30
           FQDN=$(az containerapp show --name ${{ vars.CONTAINER_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query "properties.configuration.ingress.fqdn" -o tsv)
           echo "🚀 Production URL: https://${FQDN}"
-          curl -f "https://${FQDN}/health" || exit 1
+          curl -f --max-time 30 "https://${FQDN}/health" || exit 1
           echo "✅ Production health check passed!"
