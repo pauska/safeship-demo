@@ -14,8 +14,11 @@ RUN dotnet publish -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 
-# Create non-root user for security
-RUN adduser --disabled-password --gecos '' appuser
+# Install curl for health checks and create non-root user
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && adduser --disabled-password --gecos '' appuser
 
 # Copy published app
 COPY --from=build /app/publish .
