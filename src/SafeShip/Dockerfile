@@ -18,7 +18,7 @@ WORKDIR /app
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/* \
-    && adduser --disabled-password --gecos '' appuser
+    && useradd --create-home --shell /bin/bash appuser
 
 # Copy published app
 COPY --from=build /app/publish .
