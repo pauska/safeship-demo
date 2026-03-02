@@ -191,7 +191,7 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: Download Plan
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: tfplan-${{ matrix.environment }}
           path: infra
