@@ -91,7 +91,7 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ vars.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}
           tags: |
